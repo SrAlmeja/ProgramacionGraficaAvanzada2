@@ -1,11 +1,11 @@
 #include"VBO.h"
 
 // Constructor que genera un Elements Buffer Object y lo enlaza a los indices
-VBO::VBO(GLuint* indices, GLsizeiptr size)
+VBO::VBO(GLfloat* vertices, GLsizeiptr size)
 {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
 void VBO::Bind()
