@@ -16,94 +16,104 @@ int main()
     //apuntador de refrencia a la ventana que se usara en la gpu
     GLFWwindow* window = glfwCreateWindow(800, 800, "test", NULL, NULL);
 
-    GLfloat vertices[] =
-    {
-        -0.5f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 1.0f, 0.8431f , 0.0f,
-        0.5f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 0.9922f, 0.9922f, 0.5882f,
-        0.0f, 0.5f * float(sqrt(3)) * 2 / 3 , 0.0f, 0.9922f, 0.9922f, 0.5882f,
-        -0.5f / 2, 0.5f * float(sqrt(3)) / 6 , 0.0f, 1.0f, 0.8431f , 0.0f,
-        0.5f / 2, 0.5f * float(sqrt(3)) / 6 , 0.0f, 1.0f, 1.0f , 1.0f,
-        0.0f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 1.0f, 0.8431f , 0.0f,
-    };
-
-
-    GLfloat insideVertex[] =
-    {
-         -0.45f, -0.45f * float(sqrt(3)) / 3, 0.0f,       // Esquina inferior izq
-         -0.5f / 2, 0.5f * float(sqrt(1.5f)) / 6, 0.0f,      // Interior izquierda
-         -0.05f, -0.45f * float(sqrt(3)) / 3, 0.0f,        // Interior abajo
-
-
-         0.05f, -0.45f * float(sqrt(3)) / 3, 0.0f,        // Interior abajo
-         0.45f, -0.45f * float(sqrt(3)) / 3, 0.0f,        // Esquina inferior derecha
-         0.5f / 2, 0.5f * float(sqrt(1.5f)) / 6, 0.0f,   // Esquina superior
-
-         -0.4f / 2, 0.6f * float(sqrt(3)) / 6, 0.0f,      // Interior izquierda
-         0.0f, 0.45f * float(sqrt(3)) * 2 / 3, 0.0f,   // Esquina superior
-         0.4f / 2, 0.6f * float(sqrt(3)) / 6, 0.0f,    // Interior derecha
-    };
-
-    GLuint indices[] =
-    {
-    0, 3, 5, // Triangulo inferior izq
-    3, 2, 4, // Triangulo inferior der
-    5, 4, 1 // Triangulo superior
-    };
-
-    GLuint insideIndex[] =
-    {
-    0, 1, 2, // Triangulo inferior izq
-    3, 4, 5, // Triangulo inferior der
-    6, 7, 8 // Triangulo superior
-    };
-
-    glfwMakeContextCurrent(window);
-    gladLoadGL();
-
-    //se crean shaders
-    Shader shaderProgram("default.vert", "default.frag");
-    Shader shaderInside("inner.vert", "inner.frag");
-
-    VAO VAO1;
-    VAO1.Bind();
-
-    VBO VBO1(vertices, sizeof(vertices));
-
-    EBO EBO1(indices, sizeof(indices));
-
-    VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-    VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-
-
-    VAO1.Unbind();
-    VBO1.Unbind();
-    EBO1.Unbind();
-
-    GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
-
-    glViewport(0, 0, 800, 800);
-    glfwSwapBuffers(window);
+    double seconds = 0.0f;
+    float anim = 0.1f;
+    glfwSetTime(0);
 
     while (!glfwWindowShouldClose(window))
     {
-        glClearColor(0.5255f, 0.8706f, 0.4471, 1);
+        GLfloat vertices[] =
+        {
+            -0.5f + (anim/1000), 0.0f, 0.0f, 1.0f, 0.8431f , 0.0f,
+            0.5f - (anim / 1000), 0.0f, 0.0f, 0.9922f, 0.9922f, 0.5882f,
+            0.0f, 0.6f - (anim / 750), 0.0f, 0.9922f, 0.9922f, 0.5882f,
+            -0.5f / 2 + (anim / 10000), 0.3f - (anim / 1000), 0.0f, 1.0f, 0.8431f , 0.0f,
+            0.5f / 2 - (anim / 10000), 0.3f - (anim / 1000), 0.0f, 1.0f, 1.0f , 1.0f,
+            0.0f, 0.0f, 0.0f, 1.0f, 0.8431f , 0.0f,
+
+            -0.5f + (anim / 1000), 0.0f, 0.0f, 0.3412f, 0.1373f, 0.3922f, //esquina inferior izquierda
+            0.5f - (anim / 1000), 0.0f, 0.0f, 0.4902, 0.1294f, 0.5059f, //esquina inferior derecha
+            0.0f, -0.6f + (anim / 750), 0.0f, 0.3412f, 0.1373f, 0.3922f, //punta de la trifuerza
+            -0.5f / 2 + (anim / 10000), -0.3f + (anim / 1000), 0.0f, 0.0f, 0.0f , 0.0f, //esquina superior izquierda
+            0.5f / 2 - (anim / 10000), -0.3f + (anim / 1000), 0.0f, 0.3412f, 0.1373f, 0.3922f, //esquina superior derecha
+            0.0f, 0.0f, 0.0f, 0.3412f, 0.1373f, 0.3922f, //Base
+        };
+
+        /*
+        GLfloat vertices[] =
+        {
+            -0.5f, 0.5f * float(sqrt(3)) / 3 , 0.0f, 0.4902, 0.1294f, 0.5059f, //esquina inferior izquierda
+            0.5f, 0.5f * float(sqrt(3)) / 3 , 0.0f, 0.3412f, 0.1373f, 0.3922f, //esquina inferior derecha
+            0.0f, -0.5f * float(sqrt(3)) * 2 / 3 , 0.0f, 0.3412f, 0.1373f, 0.3922f, //punta de la trifuerza
+            -0.5f / 2, -0.5f * float(sqrt(3)) / 6 , 0.0f, 0.3412f, 0.1373f, 0.3922f, //esquina superior izquierda
+            0.5f / 2, -0.5f * float(sqrt(3)) / 6 , 0.0f, 0.0f, 0.0f , 0.0f, //esquina superior derecha
+            0.0f, 0.5f * float(sqrt(3)) / 3 , 0.0f, 0.3412f, 0.1373f, 0.3922f, //Base
+        };
+        */
+
+        GLuint indices[] =
+        {
+        0, 3, 5, // Triangulo inferior izq
+        3, 2, 4, // Triangulo inferior der
+        5, 4, 1, // Triangulo superior
+        6, 9, 11,
+        9, 8, 10,
+        11, 10, 7,
+        };
+
+        glfwMakeContextCurrent(window);
+        gladLoadGL();
+
+        //se crean shaders
+        Shader shaderProgram("default.vert", "default.frag");
+        Shader shaderInside("inner.vert", "inner.frag");
+
+        VAO VAO1;
+        VAO1.Bind();
+
+        VBO VBO1(vertices, sizeof(vertices));
+
+        EBO EBO1(indices, sizeof(indices));
+
+        VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+        VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+
+        VAO1.Unbind();
+        VBO1.Unbind();
+        EBO1.Unbind();
+
+        GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale"); 
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shaderProgram.Activate();
         glUniform1f(uniID, 0.5f);
         VAO1.Bind();
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
 
         glfwPollEvents();
+
+        seconds = glfwGetTime();
+        std::cout << seconds << std::endl;
+
+        if (seconds <= 1) anim++;
+
+        if (seconds > 1) anim--;
+
+        if (seconds >= 2) glfwSetTime(0);
+
+        VAO1.Delete();
+        VBO1.Delete();
+        EBO1.Delete();
+
+        shaderProgram.Delete();
     }
 
-    VAO1.Delete();
-    VBO1.Delete();
-    EBO1.Delete();
-
-    shaderProgram.Delete();
+    glViewport(0, 0, 800, 800);
+    glfwSwapBuffers(window);
 
     glfwDestroyWindow(window);
     glfwTerminate();
