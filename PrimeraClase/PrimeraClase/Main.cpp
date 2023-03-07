@@ -14,10 +14,13 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //apuntador de refrencia a la ventana que se usara en la gpu
-    GLFWwindow* window = glfwCreateWindow(800, 800, "test", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(950, 950, "test", NULL, NULL);
 
-    double seconds = 0.0f;
-    float anim = 0.1f;
+    double seconds = 1.0f;
+    float scale;
+    float scalePercent = 0.2f;
+    float scaleGoal = 1.0f;
+
     glfwSetTime(0);
 
     GLfloat vertices[] =
@@ -44,7 +47,6 @@ int main()
 
     Shader shaderProgram("examenOne.vert", "examenOne.frag");
     Shader shaderExam("examTwo.vert", "examTwo.frag");
-    Shader shaderInside("inner.vert", "inner.frag");
 
     VAO VAO1;
     VAO1.Bind();
@@ -65,14 +67,7 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        seconds = glfwGetTime();
-        //std::cout << seconds << std::endl;
-       
-        if (seconds <= 1) anim++;
-
-        if (seconds > 1) anim--;
-
-        if (seconds >= 2) glfwSetTime(0);
+        GLfloat time = glfwGetTime() * seconds;
 
         glClearColor(0.0f, 0.0f, 0.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -80,17 +75,16 @@ int main()
         shaderExam.Activate();
         glUniform1f(examID, 0.5f);
         VAO1.Bind();
-
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+
+        scale = sin(time) * scalePercent + scaleGoal;
 
         shaderProgram.Activate();
-        glUniform1f(uniID, 1.0f * (anim/25));
-
-        std::cout << 1.0f * (anim / 25) << std::endl;
-
+        glUniform1f(uniID, scale);
         VAO1.Bind();
-
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+
+        std::cout << scale << std::endl;
 
         glfwSwapBuffers(window);
 
@@ -104,7 +98,7 @@ int main()
     shaderProgram.Delete();
     shaderExam.Delete();
 
-    glViewport(0, 0, 800, 800);
+    glViewport(0, 0, 950, 950);
     glfwSwapBuffers(window);
 
     glfwDestroyWindow(window);

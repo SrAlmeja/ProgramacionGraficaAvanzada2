@@ -6,8 +6,8 @@ uniform float scale;
 void main()
 {
  gl_Position = vec4(
- aPos.x + aPos.x * (scale/20),
- aPos.y + aPos.y * (scale/20),
- aPos.z + aPos.z * (scale/20), 1.0);
+ aPos.x + aPos.x * (scale/4),
+ aPos.y + aPos.y * (scale/4),
+ aPos.z + aPos.z * (scale/4), 1.0);
  color = aColor;
 }
