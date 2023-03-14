@@ -1,59 +1,73 @@
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include"shaderClass.h"
+#include"ShaderClass.h"
 #include"VAO.h"
 #include"VBO.h"
 #include"EBO.h"
 
+#include<stb/stb_image.h>
+
+
+
+//Se Define la version, se asignan las posiciones del atributo
+
+
 int main()
 {
     glfwInit();
+
+    //Se dice la versión a usar de Open GL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //apuntador de refrencia a la ventana que se usara en la gpu
-    GLFWwindow* window = glfwCreateWindow(950, 950, "test", NULL, NULL);
+    //Apuntador de tipo window para tener referencia de la ventana (Referencia)
+    GLFWwindow* window = glfwCreateWindow(1000, 1000, "Window", NULL, NULL);
+
 
     double seconds = 1.0f;
-    float scale;
-    float scalePercent = 0.2f;
-    float scaleGoal = 1.0f;
+    float scale, scale2;
+    float sizePercent = 0.2f;
+    float NormalScale = 1.0f;
+
+    int widthTx, heightTx, numCol;
+    GLuint texture;
+    glGenTextures(1, &texture);
+
 
     glfwSetTime(0);
 
-    GLfloat vertices[] =
+    GLfloat squareVertices[] =
     {
-        0.5f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 0.7804f, 0.5098f, 0.5137f, //esquina inferior izquierda
-        -0.5f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 0.9922f, 0.9922f, 0.5882f, //esquina inferior derecha
-        0.0f, 0.5f * float(sqrt(3)) * 2 / 3 , 0.0f, 0.3412f, 0.1373f, 0.3922f, //punta de la trifuerza
-        0.5f / 2, 0.5f * float(sqrt(3)) / 6 , 0.0f, 1.0f, 1.0f, 1.0f, //esquina superior izquierda
-        -0.5f / 2, 0.5f * float(sqrt(3)) / 6 , 0.0f, 0.4549f, 0.2588f, 0.3255f, //esquina superior derecha
-        0.0f, -0.5f * float(sqrt(3)) / 3 , 0.0f, 0.9059f, 0.1137f, 0.2118f, //Base
+     -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+     -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+     0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+     0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f
     };
 
-    GLuint indices[] =
+
+    GLuint squareIndices[] =
     {
-    0, 3, 5, // Triangulo inferior izq
-    3, 2, 4, // Triangulo inferior der
-    5, 4, 1, // Triangulo superior
+     0, 2, 1,
+     0, 3, 2
     };
 
+
+
+    //Crear un contexto para openGL
     glfwMakeContextCurrent(window);
-    gladLoadGL();
+    //Agregando el color, Se definen los colores de la pantalla
+    gladLoadGL();  //Carga las funciones en la libreria de glad
 
-    //se crean shaders
-
-    Shader shaderProgram("examenOne.vert", "examenOne.frag");
-    Shader shaderExam("examTwo.vert", "examTwo.frag");
+    //Se Crean los Shaders
+    Shader shaderProgram("D1.vert", "D1.frag");
 
     VAO VAO1;
     VAO1.Bind();
 
-    VBO VBO1(vertices, sizeof(vertices));
-
-    EBO EBO1(indices, sizeof(indices));
+    VBO VBO1(squareVertices, sizeof(squareVertices));
+    EBO EBO1(squareIndices, sizeof(squareIndices));
 
     VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
     VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -63,42 +77,45 @@ int main()
     EBO1.Unbind();
 
     GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
-    GLuint examID = glGetUniformLocation(shaderExam.ID, "scale");
+
 
     while (!glfwWindowShouldClose(window))
     {
-        GLfloat time = glfwGetTime() * seconds;
+        GLfloat time = glfwGetTime() * (18.9f * seconds);
+        GLfloat time2 = glfwGetTime() * (20.0f * seconds);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1);
+
+        //Asignacion de buffer
+        glClearColor(0.01f, 0.05f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shaderExam.Activate();
-        glUniform1f(examID, 0.5f);
+        scale = sin(time) * sizePercent + NormalScale;
+
         VAO1.Bind();
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
-        scale = sin(time) * scalePercent + scaleGoal;
+        scale2 = sin(time2) * sizePercent + NormalScale;
+
 
         shaderProgram.Activate();
-        glUniform1f(uniID, scale);
-        VAO1.Bind();
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glUniform1f(uniID, scale2);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         std::cout << scale << std::endl;
 
         glfwSwapBuffers(window);
 
         glfwPollEvents();
-    }
 
+    }
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();
 
     shaderProgram.Delete();
-    shaderExam.Delete();
 
-    glViewport(0, 0, 950, 950);
+
+    glViewport(0, 0, 1000, 1000);
     glfwSwapBuffers(window);
 
     glfwDestroyWindow(window);

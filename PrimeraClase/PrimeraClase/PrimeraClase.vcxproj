@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Usuario\Downloads\Borrar\ProgramacionGraficaAvanzada\PrimeraClase\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Usuario\Downloads\Borrar\ProgramacionGraficaAvanzada\PrimeraClase\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Usuario\Documents\Repos\SR Almeja\ProgramacionGraficaAvanzada2\PrimeraClase\include</IncludePath>
+    <LibraryPath>C:\Users\Usuario\Documents\Repos\SR Almeja\ProgramacionGraficaAvanzada2\PrimeraClase\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\6to semestre\GraficaAvanzada\ProgramacionGraficaAvanzada\PrimeraClase\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\6to semestre\GraficaAvanzada\ProgramacionGraficaAvanzada\PrimeraClase\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Usuario\Documents\Repos\SR Almeja\ProgramacionGraficaAvanzada2\PrimeraClase\include</IncludePath>
+    <LibraryPath>C:\Users\Usuario\Documents\Repos\SR Almeja\ProgramacionGraficaAvanzada2\PrimeraClase\lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Graficas-avanzadas\EL Vacio\EL Vacio\stb.cpp" />
     <ClCompile Include="..\glad.c" />
     <ClCompile Include="EBO.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -151,14 +152,13 @@
     <ClInclude Include="VAO.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag" />
-    <None Include="default.vert" />
-    <None Include="examenOne.frag" />
-    <None Include="examenOne.vert" />
-    <None Include="examTwo.frag" />
-    <None Include="examTwo.vert" />
-    <None Include="inner.frag" />
-    <None Include="inner.vert" />
+    <None Include="..\..\..\..\..\..\Downloads\D1.frag" />
+    <None Include="..\..\..\..\..\..\Downloads\D1.vert" />
+    <None Include="..\..\..\..\..\..\Downloads\D2.frag" />
+    <None Include="..\..\..\..\..\..\Downloads\D2.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\..\Desktop\Chooper.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

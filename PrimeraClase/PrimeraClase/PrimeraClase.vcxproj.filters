@@ -36,6 +36,9 @@
     <ClCompile Include="shaderClass.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Graficas-avanzadas\EL Vacio\EL Vacio\stb.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EBO.h">
@@ -52,29 +55,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="default.frag">
+    <None Include="..\..\..\..\..\..\Downloads\D1.frag">
       <Filter>Archivos de recursos\Shaders</Filter>
     </None>
-    <None Include="default.vert">
+    <None Include="..\..\..\..\..\..\Downloads\D1.vert">
       <Filter>Archivos de recursos\Shaders</Filter>
     </None>
-    <None Include="inner.frag">
+    <None Include="..\..\..\..\..\..\Downloads\D2.frag">
       <Filter>Archivos de recursos\Shaders</Filter>
     </None>
-    <None Include="inner.vert">
+    <None Include="..\..\..\..\..\..\Downloads\D2.vert">
       <Filter>Archivos de recursos\Shaders</Filter>
     </None>
-    <None Include="examenOne.frag">
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\..\Desktop\Chooper.jpg">
       <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="examenOne.vert">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="examTwo.frag">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="examTwo.vert">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
+    </Image>
   </ItemGroup>
 </Project>
